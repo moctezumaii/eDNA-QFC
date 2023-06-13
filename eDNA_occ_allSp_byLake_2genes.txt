@@ -1,0 +1,25 @@
+
+    model{
+    #priors
+    for(sp in 1:s){
+        psi[sp]~dunif(0,1)
+    }
+    for(gear in 1:g){
+      for(sp in 1:s){
+        p[gear,sp]~dunif(0,1)
+      }
+    }
+    
+
+    #likelihood (biological model for true occupancy)
+    for(i in 1:n){ #n = number of lakes
+      for(sp in 1:s){
+        z[i,sp]~dbern(psi[sp])
+      }
+    }
+    #observation model
+    for(i in 1:nr){ #nr = total number of samples
+      y[i]~dbin(p[gear[i],species[i]],z[lake[i],species[i]])
+    }
+
+}

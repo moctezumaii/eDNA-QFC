@@ -1,0 +1,487 @@
+dim(stablemat)
+eigen.analysis(stablemat)
+stablemat
+stablemat[1,16] <- 26.1
+eigen.analysis(stablemat)
+stablemat
+100*0.05
+5*(1/.05)
+stablemat
+mort <- c(0,#
+  0.558754449,#
+  0.417871823,#
+  0.350418455,#
+  0.311973144,#
+  0.287863005,#
+  0.271825907,#
+  0.260736929,#
+  0.252862276,#
+  0.247163797,#
+  0.242983609,#
+  0.239886477,#
+  0.237574808,#
+  0.23583989,#
+  0.234532445,#
+  0.233544083)
+surv <- 1-mort
+#This sets up the survival matrix for the wild population
+stablemat = matrix(0, nrow = length(surv), ncol = length(surv));
+stablemat[row(stablemat) == col(stablemat)+1] = c(surv[1:(length(surv)-1)]);
+#I don't think I quite get the fecundity values below or how they were calculated...
+origfec <-1.4 * c(0,1.6,5.3,11,15,19,22,25,28,30,31,32,33,34,34,35);
+#Do I need to remove this 2*fec thing??  This will be obvious when we look at these more closely
+fec <- 0.06 * 2 * c(0,1.6,5.3,11,15,19,22,25,28,30,31,32,33,34,34,35);  #Replaced the 1-origmort[1] with the approx. value (0.06)
+stablemat[1,] = fec;
+eigen.analysis(stablemat) -> asis
+fec <- 2 * c(0,1.6,5.3,11,15,19,22,25,28,30,31,32,33,34,34,35);  #Replaced the 1-origmort[1] with the approx. value (0.06)
+stablemat[1,] = fec;
+eigen.analysis(stablemat) -> nomort
+asis$stable.stage
+nomort$stable.stage
+fec <- 0.5* 2 * c(0,1.6,5.3,11,15,19,22,25,28,30,31,32,33,34,34,35);  #Replaced the 1-origmort[1] with the approx. value (0.06)
+stablemat[1,] = fec;
+eigen.analysis(stablemat) -> nomort
+nomort$stable.stage
+asis$stable.stage
+stablemat[1,] <- 0
+stablemat
+stablemat[1,16] <- 26.1
+eigen.analysis(stablemat)
+stablemat
+8+36
+281+214+4
+24*21
+3750*2
+library(gstudio)
+?read_population
+holoStats
+library(holoSimCell)
+holoStats
+?read.delim
+list.files("GitHub/holoSimCell")
+?list.files()
+6000*1.585
+targ <- "ENM_23"
+test <- paste0("ENM_",c(1:22))
+test %in% targ
+test <- paste0("ENM_",c(1:23))
+test %in% targ
+setwd("/mnt/research/TIMBER/ENMcomparison")
+?lm
+library(holoSimCell)
+46*3
+43*6*2
+43*6*2*2
+53*6*2
+53*6*2*2
+1e6*10
+1e7/10000
+127+15
+5061329+13021
+myg <- c(13021, 207601, 278185, 1746000, 157600, 22245, 25442, 161212, 698759, 250400, 203000, 50000, 172897, 38643, 62462, 239158, 611911, 79670, 56144)
+sum(myg)
+round(runif(1,0.001,0.25), 3)
+min(round(runif(10000000,0.001,0.25), 3))
+50000*1.03
+51500/12
+1100*26
+47+59
+63+65
+event.df <- data.frame(source = c(1,2,3,4,6,5,7,8), sink = c(0,1,2,2,2,4,1,7), prop.migrants = rep(1,8), new.size = rep(1,8), new.growth = rep(0,8), migr.mat = rep(0,8), E.times = c(1249, 682, 165, 136, 237, 82, 287, 152))
+event.df
+event.df <- data.frame(time.names = c("T.UNK", "T.FC1", "T.FC2", "T.SHD", "T.FAR", "T.MB", "T.ROW", "T.ST"), source = c(1,2,3,4,6,5,7,8), sink = c(0,1,2,2,2,4,1,7), prop.migrants = rep(1,8), new.size = rep(1,8), new.growth = rep(0,8), migr.mat = rep(0,8), E.times = c(1249, 682, 165, 136, 237, 82, 287, 152))
+event.df
+event.df <- data.frame(time.names = c("T.UNK", "T.FC1", "T.FC2", "T.SHD", "T.FAR", "T.MB", "T.ROW", "T.ST"), source = c(1,2,3,4,6,5,7,8), sink = c(0,1,2,2,2,4,1,7), prop.migrants = rep(1,8), new.size = rep(1,8), new.growth = rep(0,8), migr.mat = rep(0,8), E.times = c(1249, 682, 165, 136, 237, 82, 287, 152))
+event.df2 <- event.df
+event.df2$E.times[c(2,4,6)] <- 165
+event.df2
+for(t in unique(event.df2$E.times)){#
+    tmp <- event.df2[event.df2$E.times == t,]#
+    tmp <- tmp[tmp$source != tmp$sink,]#
+    if(length(tmp$E.times) > 1) {#
+      srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]#
+      if(length(srcsnkPOP) > 0) {#
+        srcline <- tmp[tmp$source == srcsnkPOP,]#
+        snkline <- tmp[tmp$sink == srcsnkPOP,]#
+        srcrow <- prodlim::row.match(srcline, event.df2)#
+        snkrow <- prodlim::row.match(snkline, event.df2)#
+        if(srcrow < snkrow) {#
+          event.df2[snkrow,] <- srcline#
+          event.df2[srcrow,] <- snkline#
+        }#
+        rm(srcline,snkline,srcrow,snkrow)#
+      }#
+      rm(srcsnkPOP)#
+    }#
+    rm(tmp)#
+  }
+event.df2
+event.df2 <- event.df
+event.df2$E.times[c(2,4,6)] <- 165
+for(t in unique(event.df2$E.times)){#
+    tmp <- event.df2[event.df2$E.times == t,]#
+    tmp <- tmp[tmp$source != tmp$sink,]#
+    if(length(tmp$E.times) > 1) {#
+      srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]#
+      if(length(srcsnkPOP) > 0) {#
+        if(length(srcsnkPOP) == 1) {#
+          srcline <- tmp[tmp$source == srcsnkPOP,]#
+          snkline <- tmp[tmp$sink == srcsnkPOP,]#
+          srcrow <- prodlim::row.match(srcline, event.df2)#
+          snkrow <- prodlim::row.match(snkline, event.df2)#
+          if(srcrow < snkrow) {#
+            event.df2[snkrow,] <- srcline#
+            event.df2[srcrow,] <- snkline#
+          }#
+          rm(srcline,snkline,srcrow,snkrow)#
+        } else {#
+          for(z in 1:length(srcsnkPOP)) {#
+            srcline <- tmp[tmp$source == srcsnkPOP[z],]#
+            snkline <- tmp[tmp$sink == srcsnkPOP[z],]#
+            srcrow <- prodlim::row.match(srcline, event.df2)#
+            snkrow <- prodlim::row.match(snkline, event.df2)#
+            if(srcrow < snkrow) {#
+              event.df2[snkrow,] <- srcline#
+              event.df2[srcrow,] <- snkline#
+            }#
+            rm(srcline,snkline,srcrow,snkrow)#
+          }#
+        }#
+      }#
+      rm(srcsnkPOP)#
+    }#
+    rm(tmp)#
+  }
+event.df2
+event.df2 <- event.df
+event.df2$E.times[c(2,4,6)] <- 165
+t <- 165
+tmp <- event.df2[event.df2$E.times == t,]
+tmp <- tmp[tmp$source != tmp$sink,]
+tmp
+srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]
+srcsnkPOP
+z <- 1
+srcline <- tmp[tmp$source == srcsnkPOP[z],]
+snkline <- tmp[tmp$sink == srcsnkPOP[z],]
+srcrow <- prodlim::row.match(srcline, event.df2)
+snkrow <- prodlim::row.match(snkline, event.df2)
+srcline
+snkline
+srcrow
+snkrow
+event.df2[,c(3,4)]
+event.df2[c(3,4),]
+snkline
+srcsnkPOP[z]
+tmp
+event.df2[snkrow,]
+snkrow
+srcrow
+event.df2[c(2,3,4),]
+max(srcrow)
+srcrow
+snkrow
+snkline
+sum(srcrow < snkrow)
+event.df2 <- event.df
+event.df2$E.times[c(2,4,6)] <- 165
+for(t in unique(event.df2$E.times)){#
+    tmp <- event.df2[event.df2$E.times == t,]#
+    tmp <- tmp[tmp$source != tmp$sink,]#
+    if(length(tmp$E.times) > 1) {#
+      srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]#
+      if(length(srcsnkPOP) > 0) {#
+        if(length(srcsnkPOP) == 1) {#
+          srcline <- tmp[tmp$source == srcsnkPOP,]#
+          snkline <- tmp[tmp$sink == srcsnkPOP,]#
+          srcrow <- prodlim::row.match(srcline, event.df2)#
+          snkrow <- prodlim::row.match(snkline, event.df2)#
+          if(srcrow < snkrow) {#
+            event.df2[snkrow,] <- srcline#
+            event.df2[srcrow,] <- snkline#
+          }#
+          rm(srcline,snkline,srcrow,snkrow)#
+        } else {#
+          for(z in 1:length(srcsnkPOP)) {#
+            srcline <- tmp[tmp$source == srcsnkPOP[z],]#
+            snkline <- tmp[tmp$sink == srcsnkPOP[z],]#
+            srcrow <- prodlim::row.match(srcline, event.df2)#
+            snkrow <- prodlim::row.match(snkline, event.df2)#
+            if(sum(srcrow < snkrow) > 0) {#
+              fubarows <- c(srcrow,snkrow)#
+              event.df2[max(fubarows),] <- srcline#
+              event.df2[min(fubarows),] <- snkline#
+            }#
+            rm(srcline,snkline,srcrow,snkrow)#
+          }#
+        }#
+      }#
+      rm(srcsnkPOP)#
+    }#
+    rm(tmp)#
+  }
+event.df2
+srcline
+snkline
+t <- 165
+tmp <- event.df2[event.df2$E.times == t,]
+tmp <- tmp[tmp$source != tmp$sink,]
+tmp
+srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]
+srcsnkPOP
+srcline <- tmp[tmp$source == srcsnkPOP[z],]
+snkline <- tmp[tmp$sink == srcsnkPOP[z],]
+srcrow <- prodlim::row.match(srcline, event.df2)
+snkrow <- prodlim::row.match(snkline, event.df2)
+snkline
+event.df2
+z
+z <- 1
+srcline <- tmp[tmp$source == srcsnkPOP[z],]
+snkline <- tmp[tmp$sink == srcsnkPOP[z],]
+srcrow <- prodlim::row.match(srcline, event.df)
+snkrow <- prodlim::row.match(snkline, event.df)
+srcline
+snkline
+event.df2 <- event.df
+event.df2$E.times[c(2,4,6)] <- 165
+for(t in unique(event.df2$E.times)){#
+    tmp <- event.df2[event.df2$E.times == t,]#
+    tmp <- tmp[tmp$source != tmp$sink,]#
+    if(length(tmp$E.times) > 1) {#
+      srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]#
+      if(length(srcsnkPOP) > 0) {#
+        if(length(srcsnkPOP) == 1) {#
+          srcline <- tmp[tmp$source == srcsnkPOP,]#
+          snkline <- tmp[tmp$sink == srcsnkPOP,]#
+          srcrow <- prodlim::row.match(srcline, event.df2)#
+          snkrow <- prodlim::row.match(snkline, event.df2)#
+          if(srcrow < snkrow) {#
+            event.df2[snkrow,] <- srcline#
+            event.df2[srcrow,] <- snkline#
+          }#
+          rm(srcline,snkline,srcrow,snkrow)#
+        } else {#
+          for(z in 1:length(srcsnkPOP)) {#
+            srcline <- tmp[tmp$source == srcsnkPOP[z],]#
+            snkline <- tmp[tmp$sink == srcsnkPOP[z],]#
+            srcrow <- prodlim::row.match(srcline, event.df2)#
+            snkrow <- prodlim::row.match(snkline, event.df2)#
+            if(sum(srcrow < snkrow) > 0) {#
+              fubarows <- c(srcrow,snkrow)#
+              event.df2[max(fubarows),] <- srcline#
+              event.df2[min(fubarows),] <- snkline[length(snkline[,1])]#
+            }#
+            rm(srcline,snkline,srcrow,snkrow)#
+          }#
+        }#
+      }#
+      rm(srcsnkPOP)#
+    }#
+    rm(tmp)#
+  }
+event.df2
+event.df2 <- event.df
+event.df2$E.times[c(2,4,6)] <- 165
+event.df2
+for(t in unique(event.df2$E.times)){#
+    tmp <- event.df2[event.df2$E.times == t,]#
+    tmp <- tmp[tmp$source != tmp$sink,]#
+    if(length(tmp$E.times) > 1) {#
+      srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]#
+      if(length(srcsnkPOP) > 0) {#
+        if(length(srcsnkPOP) == 1) {#
+          srcline <- tmp[tmp$source == srcsnkPOP,]#
+          snkline <- tmp[tmp$sink == srcsnkPOP,]#
+          srcrow <- prodlim::row.match(srcline, event.df2)#
+          snkrow <- prodlim::row.match(snkline, event.df2)#
+          if(srcrow < snkrow) {#
+            event.df2[snkrow,] <- srcline#
+            event.df2[srcrow,] <- snkline#
+          }#
+          rm(srcline,snkline,srcrow,snkrow)#
+        } else {#
+          for(z in 1:length(srcsnkPOP)) {#
+            srcline <- tmp[tmp$source == srcsnkPOP[z],]#
+            snkline <- tmp[tmp$sink == srcsnkPOP[z],]#
+            srcrow <- prodlim::row.match(srcline, event.df2)#
+            snkrow <- prodlim::row.match(snkline, event.df2)#
+            if(sum(srcrow < snkrow) > 0) {#
+              fubarows <- c(srcrow,snkrow)#
+              event.df2[max(fubarows),] <- srcline#
+              event.df2[min(fubarows),] <- snkline[length(snkline[,1]),]#
+            }#
+            rm(srcline,snkline,srcrow,snkrow)#
+          }#
+        }#
+      }#
+      rm(srcsnkPOP)#
+    }#
+    rm(tmp)#
+  }
+event.df2
+event.df2 <- event.df2[, c(1, 4, 2, 3, 5, 6, 7, 8)]
+event.df2[,2:(length(event.df2))] <- sapply(event.df2[,2:(length(event.df2))], as.numeric)
+event.df2
+eventlist <- list()
+for(ev in 1:nrow(event.df2)) {#
+    eventlist[[ev]] <- fscEvent(event.time = event.df2$E.times[ev], source = event.df2$source[ev], sink = event.df2$sink[ev], prop.migrants = event.df2$prop.migrants[ev], new.size = event.df2$new.size[ev], new.growth = event.df2$new.growth[ev], migr.mat = event.df2$migr.mat[ev])#
+  }
+# create events obj for fsc
+events <- do.call(fscSettingsEvents, eventlist)
+library(strataG)
+eventlist <- list()
+for(ev in 1:nrow(event.df2)) {#
+    eventlist[[ev]] <- fscEvent(event.time = event.df2$E.times[ev], source = event.df2$source[ev], sink = event.df2$sink[ev], prop.migrants = event.df2$prop.migrants[ev], new.size = event.df2$new.size[ev], new.growth = event.df2$new.growth[ev], migr.mat = event.df2$migr.mat[ev])#
+  }
+# create events obj for fsc
+events <- do.call(fscSettingsEvents, eventlist)
+# Add event times to kill ea deme (needed for fsc27)
+kill.df <- events[events$source == events$sink,]
+kill.df$event.time <- kill.df$event.time+1
+kill.df$new.size <- 0
+events <- rbind(events, kill.df)
+# order events newest to oldest
+events <- events[order(events$event.time),]
+kill.df
+eventlist <- list()
+for(ev in 1:nrow(event.df2)) {#
+    eventlist[[ev]] <- fscEvent(event.time = event.df2$E.times[ev], source = event.df2$source[ev], sink = event.df2$sink[ev], prop.migrants = event.df2$prop.migrants[ev], new.size = event.df2$new.size[ev], new.growth = event.df2$new.growth[ev], migr.mat = event.df2$migr.mat[ev])#
+  }
+eventlist
+events
+eventlist <- list()
+for(ev in 1:nrow(event.df2)) {#
+    eventlist[[ev]] <- fscEvent(event.time = event.df2$E.times[ev], source = event.df2$source[ev], sink = event.df2$sink[ev], prop.migrants = event.df2$prop.migrants[ev], new.size = event.df2$new.size[ev], new.growth = event.df2$new.growth[ev], migr.mat = event.df2$migr.mat[ev])#
+  }
+# create events obj for fsc
+events <- do.call(fscSettingsEvents, eventlist)
+events <- events[order(events$event.time),]
+events
+sum(events$source %in% c(1:8))
+sum(c(1:8) %in% events$source)
+events$source[1] <- 2
+evnts
+events
+sum(c(1:8) %in% events$source)
+allrep[x] <- sum(c(1:8) %in% events$source[events$source != events$sink]) == 8
+allrep <- c()
+allrep[x] <- sum(c(1:8) %in% events$source[events$source != events$sink]) == 8
+x <- 1
+allrep[x] <- sum(c(1:8) %in% events$source[events$source != events$sink]) == 8
+allrep
+events
+event.df <- data.frame(time.names = c("T.UNK", "T.FC1", "T.FC2", "T.SHD", "T.FAR", "T.MB", "T.ROW", "T.ST"), source = c(1,2,3,4,6,5,7,8), sink = c(0,1,2,2,2,4,1,7), prop.migrants = rep(1,8), new.size = rep(1,8), new.growth = rep(0,8), migr.mat = rep(0,8), E.times = c(1249, 682, 165, 136, 237, 82, 287, 152))
+event.df2 <- event.df
+event.df2$E.times[c(2,4,6)] <- 165
+for(t in unique(event.df2$E.times)){#
+    tmp <- event.df2[event.df2$E.times == t,]#
+    tmp <- tmp[tmp$source != tmp$sink,]#
+    if(length(tmp$E.times) > 1) {#
+      srcsnkPOP <- tmp$source[which(tmp$source %in% tmp$sink)]#
+      if(length(srcsnkPOP) > 0) {#
+        if(length(srcsnkPOP) == 1) {#
+          srcline <- tmp[tmp$source == srcsnkPOP,]#
+          snkline <- tmp[tmp$sink == srcsnkPOP,]#
+          srcrow <- prodlim::row.match(srcline, event.df2)#
+          snkrow <- prodlim::row.match(snkline, event.df2)#
+          if(srcrow < snkrow) {#
+            event.df2[snkrow,] <- srcline#
+            event.df2[srcrow,] <- snkline#
+          }#
+          rm(srcline,snkline,srcrow,snkrow)#
+        } else {#
+          for(z in 1:length(srcsnkPOP)) {#
+            srcline <- tmp[tmp$source == srcsnkPOP[z],]#
+            snkline <- tmp[tmp$sink == srcsnkPOP[z],]#
+            srcrow <- prodlim::row.match(srcline, event.df2)#
+            snkrow <- prodlim::row.match(snkline, event.df2)#
+            if(sum(srcrow < snkrow) > 0) {#
+              wrongrows <- c(srcrow,snkrow)#
+              event.df2[max(wrongrows),] <- srcline#
+              event.df2[min(wrongrows),] <- snkline[length(snkline[,1]),]#
+            }#
+            rm(srcline,snkline,srcrow,snkrow)#
+          }#
+        }#
+      }#
+      rm(srcsnkPOP)#
+    }#
+    rm(tmp)#
+  }
+event.df2
+sum(c(1:8) %in% events$source[events$source != events$sink]) == 8
+sum(c(1:8) %in% event.df2$source)
+1000*0.7
+1000*0.3
+300*0.05
+1000*0.05
+50*0.7
+50*0.3
+boxplot(runif(1000))
+boxplot(runif(1000), cex.axis = 0.5)
+setwd("~/Desktop")
+list.files()
+2^30
+2^12
+50000*24
+2.6887*2019
+setwd("~/Desktop/Lake_Polygons")#
+#
+#Several libraries are needed for manipulation of shapefiles and plotting below#
+library(sp)#
+library(maptools)#
+library(maps)#
+library(prevR)#
+library(plotrix)#
+library(TSP)#
+library(RgoogleMaps)#
+library(rgdal)
+lakename = "Austin Lake"
+lakeabbrev = "AUS"
+nsamples = 40
+lakept = c(-85.551679, 42.176194)   #Center point of the lake from LAGOS database
+launchpt = c(-85.556282, 42.180116)   #GPS coordinates of the boat launch
+setpts = matrix(data = c(#
+    -85.561704, 42.181957,#
+    -85.543352, 42.184364,#
+    -85.540284, 42.166670), ncol = 2, byrow = TRUE)
+moresetpts = NULL
+setwd("~/Desktop/Lake_Polygons")
+#lakes = readShapePoly("Lake_Polygons")
+lakes = readOGR(dsn="~/Desktop/Lake_Polygons", layer = "Lake_Polygons")
+setwd("~/Desktop/Inland_Lake_Contours")
+#depths = readShapeLines("Inland_Lake_Contours")
+depths = readOGR(dsn="~/Desktop/Inland_Lake_Contours", layer = "Inland_Lake_Contours")
+#Which lakes in the dataset match the name we're interested in
+whichone = which(lakes$LAKE_NAME == lakename)
+#Which of these contain the center point from LAGOS (lakept above l.24)
+for(x in 1:length(whichone)) {#
+    tmp = point.in.SpatialPolygons(lakept[1], lakept[2], lakes[whichone[x],])#
+    if(tmp == TRUE) {#
+        thisone = whichone[x]#
+    }#
+}
+thisone
+#Replace the full set of lakes with just the one we're interested in (saving space?)
+lakes = lakes[thisone,]
+#Figure out which contours apply to this lake
+is.in.lake = c()
+for(x in 1:length(depths@lines)) {#
+    is.in.lake[x] = point.in.SpatialPolygons(depths@lines[[x]]@Lines[[1]]@coords[1,1], depths@lines[[x]]@Lines[[1]]@coords[1,2], lakes)#
+}
+lakecontours = which(is.in.lake == TRUE)
+pts = spsample(lakes, nsamples-(length(setpts[,1])+length(moresetpts[,1])), type = "random")
+pts = as.data.frame(pts)
+pts = rbind(launchpt, pts)
+for(r in 1:length(setpts[,1])) {#
+    pts = rbind(pts,setpts[r,])#
+}
+if(!is.null(moresetpts)) {#
+    for(r in 1:length(moresetpts[,1])) {#
+        pts = rbind(pts,moresetpts[r,])#
+    }#
+}
+plot(lakes)
+plot(depths, add = TRUE)
